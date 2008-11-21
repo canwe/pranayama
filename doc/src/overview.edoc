@@ -1,0 +1,78 @@
+@author Sean A. Rasmussen <sean@erasmos.com>
+@copyright 2008 Sean A. Rasmussen
+@version 0.1.0
+@title Pranayama ~ Basic Web App Server
+@doc
+	Pranayama could be used as a  basic web app server; however,
+	it produces no content on its own; it acts
+	more like a router, in that it delegates
+	the actual content generating to another,
+	external erlang process which is the actual 'web app.
+	 
+	The general flow is as follows: 
+	
+	1) The 'real' http request is translated into an erlang
+	record (#http_request)
+
+	2) From this #http_request it determines the correct delegate web app
+	which will be responsible for generating the #http_response record. This
+	delegate must be globally registered.
+
+	3) The delegate sends back this #http_response to Pranayama,
+	which translates it into the 'real' http response and 
+	fires it back to the client.
+	
+	This application was created as an offshoot of another Erlang project
+	- [http://www.themockexchange.com] -  as
+	well as being a deliberate learning task; I've been teaching myself
+	Erlang for about a year, part time. 
+	
+	The project is hosted at [http://code.google.com/p/pranayama]
+	and released under GPL 2.
+
+	This is my first foray into the Open Source world, so any feedback	
+	as this project or in regards to good OSS behavior is welcome.
+
+	Here's a bird's eye view of the architecture:
+
+	
+
+	<em>pranayama_app</em> is the launch point, starting the 
+	only supervisor: <em>pranayama_sup</em> which in turn watches
+	over the following:
+
+	===pranayama_conversationalist===
+	
+	The connection manager which ensures that we have one and only
+	one offered connection at a time; a connection is represented
+	by a pranayama_conversation process.
+
+	===pranayama_registrar=== 
+	
+	Responsible for keeping track of all
+	registered web apps as well as permitting registration
+	and deregistration.
+				     			     
+	===pranayama_event_manager=== 
+	
+	Simple event manager which is 'supervised' by
+	pranayama_event_manager_sup to ensure that all failed
+	event handlers bounce back.
+
+	===pranayama_log=== 
+	
+	An event handler which manages the general
+	server log (as opposed to the access log).
+				     
+	===pranayama_log_writer===
+
+	Another event handler which maintains the access log (in an 
+	Apache style format).
+				     
+	===spy===			     
+
+	The only embedded web app; useful for ensuring that the server
+	is running as well getting an echo of your request; of course
+	it serves as an example as well.
+
+@end

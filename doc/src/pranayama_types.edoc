@@ -1,0 +1,58 @@
+@type app_config () = #app_config{port_num=port_num(),
+				  web_app_registration_process_name=atom(),
+				  receive_request_timeout_ms=milliseconds(),
+				  handle_request_timeout_ms=milliseconds()
+				  }.			
+=== port_num === 
+ Integer representing the port number where we'll
+attempt to listen for TCP/IP connections.
+
+=== web_app_registration_process_name === 
+ The webapps must be able to find Pranayama in order to register themselves:
+this is the <em>globally</em> registered name. Currently, the webapps
+have to be on the same host as Pranayama itself.
+
+=== receive_request_timeout ===
+ When receiving a TCP/IP request, we shouldn't offer to wait forever. 
+
+=== handler_request_timeout === 
+The maximum time we'll allow the delegated webapp to generate the response;
+once expired we inform the client of the unavailability.
+
+
+@type log_message() = #log_message{ level=log_level(),
+				     template=list(),
+				     params=list()
+				  }.	
+		
+We use io_lib:format(Template,Params) to print the message, so there
+has to be agreement between the Template and the Params
+
+@type http_request() = #http_request{method=request_method(), 
+                                      uri=string(),
+                                      version=tuple(),
+                                      headers=headers(),
+                                      params=params(),
+                                      body=binary(),
+                                      web_app_alias=string(),
+                                      web_app_path=string(),
+                                      response_format=atom()
+                                      }. 
+There are some values which are taken directly
+from the raw Http Request, while others are derived
+for the convenience of the web apps.
+
+
+@type header() = {string(),string()}.
+@type headers() = [header()]
+@type param() = {string(),[string()]}.
+@type params() = [param()]
+@type request_method() = atom(). (delete | get | header | post | put)
+@type response_format() = atom(). (json | html | text | xml).
+@type port_num() = integer(). If below 1024 the server must be run under root.
+@type milliseconds() = integer().
+@type log_level() = atom(). (trace | info | warn | error )
+@type from() = {pid(),Tag}. Tag is supposedly unique.
+@type timeout() = integer(). Should be positive | infinity
+@type ip() = {integer(),integer(),integer(),integer()} | {string(),string(),string(),string(),string(),string()}
+@type datetime() = {{Year::integer(),Month::integer(),Day::integer()}, {Hour::integer(),Minute::integer(),Seconds::integer()}}.

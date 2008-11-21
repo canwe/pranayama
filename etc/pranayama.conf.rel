@@ -1,0 +1,58 @@
+
+%% This is a modified version of pranayama.conf which
+%% is suitable for the creation of a release: it sets
+%% the log_directory to /var/log/pranayama
+
+
+
+%% Configuration file for Pranayama
+%% Configuration will only be read at server startup, so
+%% you must restart the server if you have changed anything.
+
+[   
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    %% port_num: 
+    %%
+    %% If you want to use a port below 1024, you do so as root.	If
+    %% this port is not available, the server will immediately exit.
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+    {port_num, 8888},
+
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    %% web_app_registration_process_name: 
+    %%
+    %% This is the global process name to which all web apps must
+    %% have access to, in order to register themselves with the server.
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    	       
+    {web_app_registration_process_name,pranayama_registrar},
+
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    %% receive_request_timeout_ms: 
+    %%
+    %% The number of milliseconds that the server allows for the
+    %% reading in of a request.
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+ 
+    {receive_request_timeout_ms,2000},
+ 
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    %% handle_request_timeout_ms: 
+    %%
+    %% The number of milliseconds that the server allows for the
+    %% generated of a response once the request is received; the
+    %% generation of a response is delegated to the appropriate web
+    %% app.
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    {handle_request_timeout_ms,2000},
+
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    %% log_directory: 
+    %%
+    %% Where is the server writes all of its logs.
+    %%
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+    {log_directory,"/var/log/pranayama"}
+].

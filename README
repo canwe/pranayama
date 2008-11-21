@@ -1,0 +1,121 @@
+Welcome to Pranayama, a basic web app server written in Erlang.
+
+The project home is at http://code.google.com/p/pranayama/.
+
+Please see the LICENCE file.
+
+Either you downloaded a release or the source itself.
+
+===============================================================================
+Release 
+===============================================================================
+-------------------------------------------------------------------------------
+Install
+-------------------------------------------------------------------------------
+
+The release form is not a standalone app - it requires that Erlang be installed;
+however, Pranayama comes with the dependencies that it needs.
+
+To install Pranayama with the default settings, simply sudo Install.sh; 
+this will do the following:
+
+@ Copy all the contents of lib/* to /usr/local/lib/erlang/lib; this
+  includes any dependencies that Pranayama needs such as a specific
+  version of the kernel.
+
+@ Similarly, it copies releases/* to /usr/local/lib/erlang/releases. 
+
+@ Copy the pranayama.conf file to /etc/.
+
+ The defaults for running Pranayama are:
+
+    port_num: 8888
+    web_app_registration_process_name: pranayama_registrar
+    receive_request_timeout_ms: 2000
+    handle_request_timeout_ms: 2000
+    log_directory: /var/log/pranayama 
+
+ Please see pranayama.conf for an explanation of each; however
+ the only param that you're likely to change is the port.
+
+@ Copy pranayama.sh (the control script) to /usr/local/bin.
+
+@ Create an empty log directory called pranayama in /var/log/.
+
+Once installed, all that your web apps will need is this:
+     
+     -include_lib("pranayama/include/pranayama.hrl").
+
+-------------------------------------------------------------------------------
+Control
+-------------------------------------------------------------------------------
+To see the options for the control script - pranayama.sh --
+simply run it; in brief, you can use it to start the server
+(as a daemon, or in console), stop it, and spy on it -
+that is, connect a console to an already running instance.
+
+In order to confirm that Pranayama is running properly,
+simply go to http://localhost:8888/spy/ping.
+
+===============================================================================
+Source
+===============================================================================
+You need R12B-0 or higher.
+-------------------------------------------------------------------------------
+Dependencies
+-------------------------------------------------------------------------------
+Any recent release of Erlang should work.
+For development, you will need EUnit 2.0 (it is bundled with the release).
+
+-------------------------------------------------------------------------------
+Files
+-------------------------------------------------------------------------------
+
+
+If you downloaded the source the layout should be as such:
+
+./dev.sh 	
+	 A control script intended for development: run it to see the options.
+
+./doc/
+./doc/edoc
+	Initially should be empty; target directory for the doc task of dev.sh.
+
+./doc/src
+	Contains several edoc-related files.		
+
+./ebin/ 
+	Initially should only include pranayama.app; target build directory.
+
+./etc/ 
+	Initially contains only the latest release file (.rel) but is the target 
+       	directory for created the boot scripts (with dev.sh).
+
+./include/
+	Should only contain two .hrl files.
+
+./releases 
+./releases/normal
+./releases/standalone
+	Initially the release subdirectories should be blank.
+
+./src
+	Contains all of the .erl files.
+	
+
+You can use the ./dev.sh script to do everything that you'll likely
+need to do.
+
+However, there is one kludge that I haven't been able to get around:
+before you run the 'create_normal_release' task, you must
+manually modify the ebin/pranayama.app file; see that file for
+details. Once you finish the task, please change it back, otherwise
+you'll get confused as to which conf file is being used.
+
+As well, you may have to change the .rel file to reflect your
+local versions of kernel and stdlib.
+
+Enjoy.
+
+S.A. Rasmussen (sean@erasmos.com)
+

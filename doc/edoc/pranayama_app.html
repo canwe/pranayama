@@ -1,0 +1,220 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<title>Module pranayama_app</title>
+<link rel="stylesheet" type="text/css" href="stylesheet.css" title="EDoc">
+</head>
+<body bgcolor="white">
+<div class="navbar"><a name="#navbar_top"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
+<hr>
+
+<h1>Module pranayama_app</h1>
+<ul class="index"><li><a href="#description">Description</a></li><li><a href="#types">Data Types</a></li><li><a href="#index">Function Index</a></li><li><a href="#functions">Function Details</a></li></ul>.
+<p>Copyright © (C) 2008, Erasmos /  S.A. Rasmussen</p>
+
+<p><b>Behaviours:</b> <a href="application.html"><tt>application</tt></a>.</p>
+<p><b>Authors:</b> S.A. Rasmussen (<a href="mailto:sean@erasmos.com"><tt>sean@erasmos.com</tt></a>).</p>
+
+<h2><a name="description">Description</a></h2>
+  
+    <p>This is the launch point of the application; we read in the    
+config settings from the pranayama.conf file and start the top-most    
+supervisor - pranayama_sup. The location of this conf file is    
+set in ebin/pranayama.app.</p>
+  
+    <p>The application configuration is represented by the #app_config    
+record, and is passed throughout the system.</p>
+  
+   <h3><a name="Licence">Licence</a></h3><p>   
+This program is free software; you can redistribute it and/or   
+modify it under the terms of the GNU General Public License as   
+published by the Free Software Foundation; either version 2 of the   
+License, or (at your option) any later version.</p>
+  
+   <p>This program is distributed in the hope that it will be useful,   
+but WITHOUT ANY WARRANTY; without even the implied warranty of   
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU   
+General Public License for more details.</p>
+  
+   You should have received a copy of the GNU General Public License
+   along with this program; if not, write to the Free Software
+   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+   02111-1307 USA
+  
+<h2><a name="types">Data Types</a></h2>
+
+<h3 class="typedecl"><a name="type-app_config">app_config()</a></h3>
+<p><tt>app_config() = #app_config{port_num = <a href="#type-port_num">port_num()</a>, web_app_registration_process_name = atom(), receive_request_timeout_ms = <a href="#type-milliseconds">milliseconds()</a>, handle_request_timeout_ms = <a href="#type-milliseconds">milliseconds()</a>}</tt></p>
+<p><h4><a name="port_num">port_num</a></h4><p> 
+Integer representing the port number where we'll
+attempt to listen for TCP/IP connections.</p>
+
+<h4><a name="web_app_registration_process_name">web_app_registration_process_name</a></h4><p>
+ The webapps must be able to find Pranayama in order to register themselves:
+this is the <em>globally</em> registered name. Currently, the webapps
+have to be on the same host as Pranayama itself.</p>
+
+<h4><a name="receive_request_timeout">receive_request_timeout</a></h4><p> 
+When receiving a TCP/IP request, we shouldn't offer to wait forever. </p>
+
+<h4><a name="handler_request_timeout">handler_request_timeout</a></h4><p>
+The maximum time we'll allow the delegated webapp to generate the response;
+once expired we inform the client of the unavailability.</p>
+
+</p>
+
+<h3 class="typedecl"><a name="type-datetime">datetime()</a></h3>
+<p><tt>datetime() = {{Year::integer(), Month::integer(), Day::integer()}, {Hour::integer(), Minute::integer(), Seconds::integer()}}</tt></p>
+
+
+<h3 class="typedecl"><a name="type-from">from()</a></h3>
+<p><tt>from() = {pid(), Tag}</tt></p>
+<p>Tag is supposedly unique.</p>
+
+<h3 class="typedecl"><a name="type-header">header()</a></h3>
+<p><tt>header() = {string(), string()}</tt></p>
+
+
+<h3 class="typedecl"><a name="type-headers">headers()</a></h3>
+<p><tt>headers() = [<a href="#type-header">header()</a>]</tt></p>
+
+
+<h3 class="typedecl"><a name="type-http_request">http_request()</a></h3>
+<p><tt>http_request() = #http_request{method = <a href="#type-request_method">request_method()</a>, uri = string(), version = tuple(), headers = <a href="#type-headers">headers()</a>, params = <a href="#type-params">params()</a>, body = binary(), web_app_alias = string(), web_app_path = string(), response_format = atom()}</tt></p>
+<p><p>There are some values which are taken directly
+from the raw Http Request, while others are derived
+for the convenience of the web apps.</p>
+
+</p>
+
+<h3 class="typedecl"><a name="type-ip">ip()</a></h3>
+<p><tt>ip() = {integer(), integer(), integer(), integer()} | {string(), string(), string(), string(), string(), string()}</tt></p>
+
+
+<h3 class="typedecl"><a name="type-log_level">log_level()</a></h3>
+<p><tt>log_level() = atom()</tt></p>
+<p>(trace | info | warn | error )</p>
+
+<h3 class="typedecl"><a name="type-log_message">log_message()</a></h3>
+<p><tt>log_message() = #log_message{level = <a href="#type-log_level">log_level()</a>, template = list(), params = list()}</tt></p>
+<p>We use io_lib:format(Template,Params) to print the message, so there
+has to be agreement between the Template and the Params
+</p>
+
+<h3 class="typedecl"><a name="type-milliseconds">milliseconds()</a></h3>
+<p><tt>milliseconds() = integer()</tt></p>
+
+
+<h3 class="typedecl"><a name="type-param">param()</a></h3>
+<p><tt>param() = {string(), [string()]}</tt></p>
+
+
+<h3 class="typedecl"><a name="type-params">params()</a></h3>
+<p><tt>params() = [<a href="#type-param">param()</a>]</tt></p>
+
+
+<h3 class="typedecl"><a name="type-port_num">port_num()</a></h3>
+<p><tt>port_num() = integer()</tt></p>
+<p>If below 1024 the server must be run under root.</p>
+
+<h3 class="typedecl"><a name="type-request_method">request_method()</a></h3>
+<p><tt>request_method() = atom()</tt></p>
+<p>(delete | get | header | post | put)</p>
+
+<h3 class="typedecl"><a name="type-response_format">response_format()</a></h3>
+<p><tt>response_format() = atom()</tt></p>
+<p>(json | html | text | xml).</p>
+
+<h3 class="typedecl"><a name="type-timeout">timeout()</a></h3>
+<p><tt>timeout() = integer()</tt></p>
+<p>Should be positive | infinity</p>
+
+<h2><a name="index">Function Index</a></h2>
+<table width="100%" border="1" cellspacing="0" cellpadding="2" summary="function index"><tr><td valign="top"><a href="#get_config-1">get_config/1*</a></td><td>
+ 
+  The contents of the ConfigFile should be a list of tuples,
+  each tuple representing a config Key and Value; this
+  configuration is mandatory so we exit if we fail to read
+  from the file.</td></tr>
+<tr><td valign="top"><a href="#get_config_value-2">get_config_value/2*</a></td><td>
+ 
+  We assume here that all values are mandatory; if we fail
+  to find a value for the Key, we exit.</td></tr>
+<tr><td valign="top"><a href="#read_app_config-1">read_app_config/1*</a></td><td>
+ 
+   We get all our config values from the pranayama.conf file, The
+   #app_config record itself has no defaults.</td></tr>
+<tr><td valign="top"><a href="#start-2">start/2</a></td><td>   
+'Type' is usually 'normal' but could indicated a takeover or failover,   
+if this app is in a cluster.</td></tr>
+<tr><td valign="top"><a href="#stop-1">stop/1</a></td><td>  
+Currently we have no clean-up to do at this level.</td></tr>
+</table>
+
+<h2><a name="functions">Function Details</a></h2>
+
+<h3 class="function"><a name="get_config-1">get_config/1 *</a></h3>
+<div class="spec">
+<p><tt>get_config(ConfigFile::string()) -&gt; any()</tt></p>
+</div><p>
+ 
+  The contents of the ConfigFile should be a list of tuples,
+  each tuple representing a config Key and Value; this
+  configuration is mandatory so we exit if we fail to read
+  from the file.
+ </p>
+
+<h3 class="function"><a name="get_config_value-2">get_config_value/2 *</a></h3>
+<div class="spec">
+<p><tt>get_config_value(Config::[tuple()], Key::atom()) -&gt; any()</tt></p>
+</div><p>
+ 
+  We assume here that all values are mandatory; if we fail
+  to find a value for the Key, we exit.
+ </p>
+
+<h3 class="function"><a name="read_app_config-1">read_app_config/1 *</a></h3>
+<div class="spec">
+<p><tt>read_app_config(ConfigFile::string()) -&gt; <a href="#type-app_config">app_config()</a></tt></p>
+</div><p>
+ 
+   We get all our config values from the pranayama.conf file, The
+   #app_config record itself has no defaults. If any of these values
+   are missing, we exit.
+ </p>
+
+<h3 class="function"><a name="start-2">start/2</a></h3>
+<div class="spec">
+<p><tt>start(Type::atom(), StartArgs::list()) -&gt; {ok, Pid} | {ok, Pid, State} | {error, Reason}</tt></p>
+</div><p><p>   
+'Type' is usually 'normal' but could indicated a takeover or failover,   
+if this app is in a cluster. The StartArgs come from the pranayama.app   
+file in the 'mod' section -  the list   
+after 'pranayama_app' will be sent in as this param; currently   
+there is only one such arg: the location of the config file.</p>
+ 
+   <i>"This function is called whenever an application
+   is started using application:start/1,2, and should start the processes
+   of the application. If the application is structured according to the
+   OTP design principles as a supervision tree, this means starting the
+   top supervisor of the tree."</i>
+ </p>
+<p><b><font color="red">To do</font></b><ul><li><font color="red">How to suppress the behaviour link?</font></li></ul></p>
+
+<h3 class="function"><a name="stop-1">stop/1</a></h3>
+<div class="spec">
+<p><tt>stop(State::any()) -&gt; <a href="#type-void">void()</a></tt></p>
+</div><p><p>  
+Currently we have no clean-up to do at this level.</p>
+ 
+   <p><i>"This function is called whenever an application
+   has stopped. It is intended to be the opposite of Module:start/2 and
+   should do any necessary cleaning up. The return value is ignored."</i></p>
+ 
+ </p>
+<hr>
+
+<div class="navbar"><a name="#navbar_bottom"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
+<p><i>Generated by EDoc, Nov 21 2008, 15:22:12.</i></p>
+</body>
+</html>
