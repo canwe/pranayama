@@ -1,0 +1,7 @@
+{packages,[]}.
+{modules,[pranayama_app,pranayama_conversation,pranayama_conversationalist,
+          pranayama_dev,pranayama_event_manager,pranayama_event_manager_sup,
+          pranayama_log,pranayama_log_writer,pranayama_logger,pranayama_net,
+          pranayama_registrar,pranayama_request_reader,
+          pranayama_response_writer,pranayama_spy,pranayama_sup,
+          pranayama_utils,test_pranayama]}.

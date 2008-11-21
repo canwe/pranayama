@@ -1,0 +1,13 @@
+
+
+{release, 
+	  {"Pranayama","Pranayama_0.1.0"},
+	  {erts,"5.6.5"},
+	  [{kernel,"2.12.5"},
+	   {stdlib,"1.15.5"},
+	   {sasl,"2.1.5.4"},
+	   {eunit,"2.0"},
+	   {pranayama,"0.1.0"}
+	   ]
+}.
+	   	

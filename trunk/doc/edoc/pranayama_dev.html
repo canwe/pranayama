@@ -1,0 +1,211 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<title>Module pranayama_dev</title>
+<link rel="stylesheet" type="text/css" href="stylesheet.css" title="EDoc">
+</head>
+<body bgcolor="white">
+<div class="navbar"><a name="#navbar_top"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
+<hr>
+
+<h1>Module pranayama_dev</h1>
+<ul class="index"><li><a href="#description">Description</a></li><li><a href="#types">Data Types</a></li><li><a href="#index">Function Index</a></li><li><a href="#functions">Function Details</a></li></ul>    
+This is not part of the application, but rather provided    
+for the convenience of development; it needn't be referenced    
+in pranayama.app.
+<p>Copyright © (C) 2008, Erasmos /  S.A. Rasmussen</p>
+
+<p><b>Authors:</b> S.A. Rasmussen (<a href="mailto:sean@erasmos.com"><tt>sean@erasmos.com</tt></a>).</p>
+
+<h2><a name="description">Description</a></h2><p>    
+This is not part of the application, but rather provided    
+for the convenience of development; it needn't be referenced    
+in pranayama.app.</p>
+  
+   <h3><a name="Licence">Licence</a></h3><p>   
+This program is free software; you can redistribute it and/or   
+modify it under the terms of the GNU General Public License as   
+published by the Free Software Foundation; either version 2 of the   
+License, or (at your option) any later version.</p>
+  
+   <p>This program is distributed in the hope that it will be useful,   
+but WITHOUT ANY WARRANTY; without even the implied warranty of   
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU   
+General Public License for more details.</p>
+  
+   You should have received a copy of the GNU General Public License
+   along with this program; if not, write to the Free Software
+   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+   02111-1307 USA
+  
+<h2><a name="types">Data Types</a></h2>
+
+<h3 class="typedecl"><a name="type-app_config">app_config()</a></h3>
+<p><tt>app_config() = #app_config{port_num = <a href="#type-port_num">port_num()</a>, web_app_registration_process_name = atom(), receive_request_timeout_ms = <a href="#type-milliseconds">milliseconds()</a>, handle_request_timeout_ms = <a href="#type-milliseconds">milliseconds()</a>}</tt></p>
+<p><h4><a name="port_num">port_num</a></h4><p> 
+Integer representing the port number where we'll
+attempt to listen for TCP/IP connections.</p>
+
+<h4><a name="web_app_registration_process_name">web_app_registration_process_name</a></h4><p>
+ The webapps must be able to find Pranayama in order to register themselves:
+this is the <em>globally</em> registered name. Currently, the webapps
+have to be on the same host as Pranayama itself.</p>
+
+<h4><a name="receive_request_timeout">receive_request_timeout</a></h4><p> 
+When receiving a TCP/IP request, we shouldn't offer to wait forever. </p>
+
+<h4><a name="handler_request_timeout">handler_request_timeout</a></h4><p>
+The maximum time we'll allow the delegated webapp to generate the response;
+once expired we inform the client of the unavailability.</p>
+
+</p>
+
+<h3 class="typedecl"><a name="type-datetime">datetime()</a></h3>
+<p><tt>datetime() = {{Year::integer(), Month::integer(), Day::integer()}, {Hour::integer(), Minute::integer(), Seconds::integer()}}</tt></p>
+
+
+<h3 class="typedecl"><a name="type-from">from()</a></h3>
+<p><tt>from() = {pid(), Tag}</tt></p>
+<p>Tag is supposedly unique.</p>
+
+<h3 class="typedecl"><a name="type-header">header()</a></h3>
+<p><tt>header() = {string(), string()}</tt></p>
+
+
+<h3 class="typedecl"><a name="type-headers">headers()</a></h3>
+<p><tt>headers() = [<a href="#type-header">header()</a>]</tt></p>
+
+
+<h3 class="typedecl"><a name="type-http_request">http_request()</a></h3>
+<p><tt>http_request() = #http_request{method = <a href="#type-request_method">request_method()</a>, uri = string(), version = tuple(), headers = <a href="#type-headers">headers()</a>, params = <a href="#type-params">params()</a>, body = binary(), web_app_alias = string(), web_app_path = string(), response_format = atom()}</tt></p>
+<p><p>There are some values which are taken directly
+from the raw Http Request, while others are derived
+for the convenience of the web apps.</p>
+
+</p>
+
+<h3 class="typedecl"><a name="type-ip">ip()</a></h3>
+<p><tt>ip() = {integer(), integer(), integer(), integer()} | {string(), string(), string(), string(), string(), string()}</tt></p>
+
+
+<h3 class="typedecl"><a name="type-log_level">log_level()</a></h3>
+<p><tt>log_level() = atom()</tt></p>
+<p>(trace | info | warn | error )</p>
+
+<h3 class="typedecl"><a name="type-log_message">log_message()</a></h3>
+<p><tt>log_message() = #log_message{level = <a href="#type-log_level">log_level()</a>, template = list(), params = list()}</tt></p>
+<p>We use io_lib:format(Template,Params) to print the message, so there
+has to be agreement between the Template and the Params
+</p>
+
+<h3 class="typedecl"><a name="type-milliseconds">milliseconds()</a></h3>
+<p><tt>milliseconds() = integer()</tt></p>
+
+
+<h3 class="typedecl"><a name="type-param">param()</a></h3>
+<p><tt>param() = {string(), [string()]}</tt></p>
+
+
+<h3 class="typedecl"><a name="type-params">params()</a></h3>
+<p><tt>params() = [<a href="#type-param">param()</a>]</tt></p>
+
+
+<h3 class="typedecl"><a name="type-port_num">port_num()</a></h3>
+<p><tt>port_num() = integer()</tt></p>
+<p>If below 1024 the server must be run under root.</p>
+
+<h3 class="typedecl"><a name="type-request_method">request_method()</a></h3>
+<p><tt>request_method() = atom()</tt></p>
+<p>(delete | get | header | post | put)</p>
+
+<h3 class="typedecl"><a name="type-response_format">response_format()</a></h3>
+<p><tt>response_format() = atom()</tt></p>
+<p>(json | html | text | xml).</p>
+
+<h3 class="typedecl"><a name="type-timeout">timeout()</a></h3>
+<p><tt>timeout() = integer()</tt></p>
+<p>Should be positive | infinity</p>
+
+<h2><a name="index">Function Index</a></h2>
+<table width="100%" border="1" cellspacing="0" cellpadding="2" summary="function index"><tr><td valign="top"><a href="#compile-0">compile/0</a></td><td>
+  It is essential to compile with the NOTEST flag,
+  otherwise <em>pranayama_net</em> will operate in test mode,
+  using 'mocks' and this application will not work.</td></tr>
+<tr><td valign="top"><a href="#compile_for_tests-0">compile_for_tests/0</a></td><td>
+   Note that we leave out the 'NOTEST' flag; otherwise we wouldn't
+   be running against the mocks in <em>pranayama_net</em>.</td></tr>
+<tr><td valign="top"><a href="#create_normal_release-0">create_normal_release/0</a></td><td>
+  By normal release, we mean as opposed to a standalone release which
+  comes with an embedded Erlang runtime.</td></tr>
+<tr><td valign="top"><a href="#doc-0">doc/0</a></td><td>
+  Edocs over all our source files; we include the private methods
+  as well as our todos.</td></tr>
+<tr><td valign="top"><a href="#makeboot-0">makeboot/0</a></td><td>
+   Makes a boot script for local use (as opposed to one suitable for
+   a release, as we do in create_normal_release()).</td></tr>
+<tr><td valign="top"><a href="#test-0">test/0</a></td><td>
+   Our module <em>test_pranayama</em> contains calls to all our unit tests.</td></tr>
+<tr><td valign="top"><a href="#xref-0">xref/0</a></td><td>
+   Runs xref over all our beams.</td></tr>
+</table>
+
+<h2><a name="functions">Function Details</a></h2>
+
+<h3 class="function"><a name="compile-0">compile/0</a></h3>
+<div class="spec">
+<p><tt>compile() -&gt; ok</tt></p>
+</div><p>
+  It is essential to compile with the NOTEST flag,
+  otherwise <em>pranayama_net</em> will operate in test mode,
+  using 'mocks' and this application will not work.
+ </p>
+
+<h3 class="function"><a name="compile_for_tests-0">compile_for_tests/0</a></h3>
+<div class="spec">
+<p><tt>compile_for_tests() -&gt; ok</tt></p>
+</div><p>
+   Note that we leave out the 'NOTEST' flag; otherwise we wouldn't
+   be running against the mocks in <em>pranayama_net</em>.</p>
+
+<h3 class="function"><a name="create_normal_release-0">create_normal_release/0</a></h3>
+<div class="spec">
+<p><tt>create_normal_release() -&gt; ok</tt></p>
+</div><p>
+  By normal release, we mean as opposed to a standalone release which
+  comes with an embedded Erlang runtime. Frankly, I had trouble getting
+  that working.</p>
+
+<h3 class="function"><a name="doc-0">doc/0</a></h3>
+<div class="spec">
+<p><tt>doc() -&gt; ok</tt></p>
+</div><p>
+  Edocs over all our source files; we include the private methods
+  as well as our todos. We do not, however, include any outside
+  applications; if someone could get that working, that would be swell.</p>
+
+<h3 class="function"><a name="makeboot-0">makeboot/0</a></h3>
+<div class="spec">
+<p><tt>makeboot() -&gt; ok</tt></p>
+</div><p>
+   Makes a boot script for local use (as opposed to one suitable for
+   a release, as we do in create_normal_release()).</p>
+
+<h3 class="function"><a name="test-0">test/0</a></h3>
+<div class="spec">
+<p><tt>test() -&gt; ok</tt></p>
+</div><p>
+   Our module <em>test_pranayama</em> contains calls to all our unit tests.
+ </p>
+
+<h3 class="function"><a name="xref-0">xref/0</a></h3>
+<div class="spec">
+<p><tt>xref() -&gt; ok</tt></p>
+</div><p>
+   Runs xref over all our beams.
+ </p>
+<hr>
+
+<div class="navbar"><a name="#navbar_bottom"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
+<p><i>Generated by EDoc, Nov 21 2008, 15:22:12.</i></p>
+</body>
+</html>
